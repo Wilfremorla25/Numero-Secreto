@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Número Secreto</title>
+
+  <!-- Fuente de Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <!-- CSS externo -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header>
+    <nav>
+      <ul>
+        <li><a href="#">Inicio</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div class="card">
+      <h1>🎮 Número Secreto</h1>
+      <p>Intenta adivinar el número secreto del <b>1 al 10</b></p>
+
+      <div class="config">
+        <label for="maxIntentos">Intentos disponibles:</label>
+        <input type="number" id="maxIntentos" placeholder="Ej: 5">
+        <button class="btn start" onclick="nuevoJuego()">Iniciar Juego</button>
+      </div>
+
+      <div class="juego">
+        <input type="number" id="numero" placeholder="Escribe un número">
+        <div class="botones">
+          <button class="btn" onclick="intentar()">Intentar</button>
+          <button class="btn reset" onclick="nuevoJuego()">Reiniciar</button>
+        </div>
+      </div>
+
+      <p id="mensaje"></p>
+    </div>
+  </main>
+
+  <script>
+    let numeroSecreto;
+    let intentos;
+    let maxIntentos;
+
+    function nuevoJuego() {
+      maxIntentos = parseInt(document.getElementById("maxIntentos").value);
+
+      if (isNaN(maxIntentos) || maxIntentos <= 0) {
+        alert("Por favor ingresa un número válido de intentos.");
+        return;
+      }
+
+      numeroSecreto = Math.floor(Math.random() * 10) + 1; 
+      intentos = 0;
+      document.getElementById("mensaje").textContent = `✅ ¡Nuevo juego iniciado! Tienes ${maxIntentos} intentos.`;
+      document.getElementById("numero").value = "";
+      console.log("Número secreto:", numeroSecreto); // Solo para pruebas
+    }
+
+    function intentar() {
+      if (!maxIntentos) {
+        alert("Debes iniciar un juego primero indicando los intentos disponibles.");
+        return;
+      }
+
+      let numeroInput = document.getElementById("numero");
+      let valor = numeroInput.value;
+
+      if (valor === "") {
+        alert("Por favor ingresa un número.");
+        return;
+      }
+
+      let numero = parseInt(valor);
+      intentos++;
+      numeroInput.value = ""; 
+
+      if (numero === numeroSecreto) {
+        document.getElementById("mensaje").textContent = 
+          `🎉 ¡Felicidades! Adivinaste el número secreto en ${intentos} ${intentos === 1 ? "intento" : "intentos"}.`;
+        maxIntentos = null; 
+      } else if (intentos >= maxIntentos) {
+        document.getElementById("mensaje").textContent = 
+          `❌ Game Over. El número secreto era: ${numeroSecreto}`;
+        maxIntentos = null; 
+      } else if (numero < numeroSecreto) {
+        document.getElementById("mensaje").textContent = 
+          `El número secreto es mayor. 🔼 Intentos usados: ${intentos}/${maxIntentos}`;
+      } else {
+        document.getElementById("mensaje").textContent = 
+          `El número secreto es menor. 🔽 Intentos usados: ${intentos}/${maxIntentos}`;
+      }
+    }
+  </script>
+
+</body>
+</html>
